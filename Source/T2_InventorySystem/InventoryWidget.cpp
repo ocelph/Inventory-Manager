@@ -21,6 +21,8 @@ void UInventoryWidget::RefreshInventory(TArray<UItemObject*> Items)
 		{
 			return;
 		}
+		
+		// Items are the items in our current inventory
 		ButtonList[i]->UpdateItemIcon(*ImageMap.Find(Items[i]->GetName()));
 	}
 }
@@ -63,9 +65,11 @@ void UInventoryWidget::NativeConstruct()
 
 void UInventoryWidget::OnButtonWasClicked(UItemButtonWidget* Button)
 {
+	// Find: function from TArray that takes in an object and returns its position in the TArray
 	SelectedItemIndex = ButtonList.Find(Button);
 	
 	UE_LOG(LogTemp, Warning, TEXT("Button %s, Index %d"), *Button->GetName(), SelectedItemIndex);
+	
 	
 	UItemObject* SelectedItem = Owner -> GetItemAtIndex(SelectedItemIndex);
 	
