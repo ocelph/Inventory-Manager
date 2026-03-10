@@ -1,0 +1,102 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "InventoryActorComponent.h"
+
+// Sets default values for this component's properties
+UInventoryActorComponent::UInventoryActorComponent()
+{
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
+	PrimaryComponentTick.bCanEverTick = false;
+	InventorySize = 12;
+
+	// ...
+}
+
+
+// Called when the game starts
+void UInventoryActorComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Generate Items at the start of the play
+	CreateDefaultItems();
+	
+	// ...
+	
+}
+
+TArray<UItemObject*> UInventoryActorComponent::GetAllItems()
+{
+	return InventoryItems;
+}
+
+UItemObject* UInventoryActorComponent::GetItemAtIndex(int32 Index)
+{
+	if(Index >= InventoryItems.Num() || Index < 0)
+	{
+		return nullptr;
+	}
+	
+	return InventoryItems[Index];
+}
+
+bool UInventoryActorComponent::UseItemAtIndex(int32 Index, AT2_InventorySystemCharacter* Character)
+{
+	// to be changed when we add the functionality
+	return true;
+}
+
+bool UInventoryActorComponent::DeleteItemAtIndex(int32 Index)
+{
+	if (Index >= InventoryItems.Num() || Index < 0)
+	{
+		return false;
+	}
+	
+	InventoryItems.RemoveAt(Index);
+	return true;
+}
+
+bool UInventoryActorComponent::AddItem(UItemObject* NewItem)
+{
+	// check if there is still space in the inventory. if there is add and return true, else return false
+	if (InventoryItems.Num() >= InventorySize)
+	{
+		return false;
+	} 
+	
+	// could do an if else but anyway it wont reach here if it goes into the if statement
+	InventoryItems.Add(NewItem);
+	return true;
+	
+}
+
+void UInventoryActorComponent::CreateDefaultItems()
+{
+	// Declares a pointer variable named TempItem of type UItemObject
+	UItemObject* TempItem;
+	
+	// Creates a new instance of UItemObject in memory.
+	// NewObject is used for creating new UObject instances at runtime.
+	// we have to instantiate a new object every time because these are pointers so they need to be objects of their own, if we just SetName, it would be changing the same object 
+	
+	TempItem = NewObject<UItemObject>();
+	TempItem->SetName("Health");
+	TempItem->SetDescription("A potion to recover lost health");
+	InventoryItems.Add(TempItem);
+	
+	TempItem = NewObject<UItemObject>();
+	TempItem->SetName("Shrink");
+	TempItem->SetDescription("Makes you shrink for 10 seconds");
+	InventoryItems.Add(TempItem);
+	
+	TempItem = NewObject<UItemObject>();
+	TempItem->SetName("Freeze");
+	TempItem->SetDescription("Makes you freeze for 10 seconds");
+	InventoryItems.Add(TempItem);
+	
+}
+
+

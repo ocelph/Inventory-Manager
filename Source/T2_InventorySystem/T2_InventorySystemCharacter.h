@@ -110,11 +110,15 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 protected:
-	void CreateDefaultItems();
-	// TArray is our actual Inventory. It will contain pointers to objects UItemObject
-	// We use UPROPERTY so that it gets garbage collected
-	UPROPERTY()
-		TArray<UItemObject*> InventoryItems;
+	
+	// EditAnywhere: Variable can be edited in the Unreal Editor
+	// BlueprintReadOnly: Blueprints can read the value but cannot modify it
+	// Category = "Inventory": Instead of being in Default, it appears under Inventory > InventorySize
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
+		class UInventoryActorComponent* InventoryComponent;
+
+	bool AddItem(UItemObject* NewItem);
 
 public:
 	/* These functions will allow us to provide indices and either get the item in our inventory at

@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "T2_InventorySystem.h"
+#include "InventoryActorComponent.h"
 
 AT2_InventorySystemCharacter::AT2_InventorySystemCharacter()
 {
@@ -48,6 +49,8 @@ AT2_InventorySystemCharacter::AT2_InventorySystemCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	InventoryComponent = CreateDefaultSubobject<UInventoryActorComponent>(TEXT("Inventory Component"));
 }
 
 void AT2_InventorySystemCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -85,7 +88,7 @@ void AT2_InventorySystemCharacter::BeginPlay()
 			InventoryWidget->Owner = this; 
 		}
 		
-		CreateDefaultItems();
+		InventoryWidget->RefreshInventory(InventoryComponent->GetAllItems());
 	}
 }
 
@@ -154,52 +157,20 @@ void AT2_InventorySystemCharacter::DoJumpEnd()
 	StopJumping();
 }
 
-void AT2_InventorySystemCharacter::CreateDefaultItems()
-{
-	// Declares a pointer variable named TempItem of type UItemObject
-	UItemObject* TempItem;
-	
-	// Creates a new instance of UItemObject in memory.
-	// NewObject is used for creating new UObject instances at runtime.
-	// we have to instantiate a new object every time because these are pointers so they need to be objects of their own, if we just SetName, it would be changing the same object 
-	
-	TempItem = NewObject<UItemObject>();
-	TempItem->SetName("Health");
-	TempItem->SetDescription("A potion to recover lost health");
-	InventoryItems.Add(TempItem);
-	
-	TempItem = NewObject<UItemObject>();
-	TempItem->SetName("Shrink");
-	TempItem->SetDescription("Makes you shrink for 10 seconds");
-	InventoryItems.Add(TempItem);
-	
-	TempItem = NewObject<UItemObject>();
-	TempItem->SetName("Freeze");
-	TempItem->SetDescription("Makes you freeze for 10 seconds");
-	InventoryItems.Add(TempItem);
-	
-	InventoryWidget->RefreshInventory(InventoryItems);
-	
 
+bool AT2_InventorySystemCharacter::AddItem(UItemObject* NewItem)
+{
+	return InventoryComponent->AddItem(NewItem);
 }
 
 UItemObject* AT2_InventorySystemCharacter::GetItemAtIndex(int32 Index)
 {
-	if (Index >= InventoryItems.Num() || Index<0)
-	{
-		return nullptr;
-	}
-	return InventoryItems[Index];
+	return InventoryComponent->GetItemAtIndex(Index);
 }
 
 void AT2_InventorySystemCharacter::DeleteItemAtIndex(int32 Index)
 {
-	if (Index >= InventoryItems.Num() || Index<0)
-	{
-		return;
-	}
-	
-	InventoryItems.RemoveAt(Index);
-	InventoryWidget->RefreshInventory(InventoryItems);
+	InventoryComponent->DeleteItemAtIndex(Index);
+	InventoryWidget->RefreshInventory(InventoryComponent->GetAllItems());
 	
 }
