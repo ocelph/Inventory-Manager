@@ -111,10 +111,11 @@ public:
 
 protected:
 	
-	// EditAnywhere: Variable can be edited in the Unreal Editor
+	// EditAnywhere: It means that the value can be edited from the editor, code, or blueprints.
 	// BlueprintReadOnly: Blueprints can read the value but cannot modify it
 	// Category = "Inventory": Instead of being in Default, it appears under Inventory > InventorySize
-	
+	// Category allows us to specify a category it will appear in editor when editing a Blueprint subclass or an instance in the Game World
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 		class UInventoryActorComponent* InventoryComponent;
 
@@ -127,7 +128,19 @@ public:
 	void DeleteItemAtIndex(int32 Index);
 	
 	
+public:
+	// These functions and variables were added for the Inventory Action we created
 	
+	//  store a reference of the action in the character class so that the action can be bound to a specific function
+	UPROPERTY(EditAnywhere)
+	UInputAction* InventoryAction;
+	
+	//  variable to track the state of our inventory
+	bool bIsInventoryOpen;
+	
+	// function that will be called when the action is triggered
+	UFUNCTION()
+	void ToggleInventory();
 	
 };
 

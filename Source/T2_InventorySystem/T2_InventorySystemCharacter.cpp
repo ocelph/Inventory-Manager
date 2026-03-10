@@ -51,6 +51,7 @@ AT2_InventorySystemCharacter::AT2_InventorySystemCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryActorComponent>(TEXT("Inventory Component"));
+	bIsInventoryOpen = false;
 }
 
 void AT2_InventorySystemCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -58,6 +59,11 @@ void AT2_InventorySystemCharacter::SetupPlayerInputComponent(UInputComponent* Pl
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
+		// Different types of event triggers (ETriggerEvent):
+			// Triggered is activated every single tick if the button is pressed.
+			// Completed is activated when the button is released.
+			// Started is activated the tick that a button is pressed.
+
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -68,6 +74,9 @@ void AT2_InventorySystemCharacter::SetupPlayerInputComponent(UInputComponent* Pl
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AT2_InventorySystemCharacter::Look);
+		
+		// Inventory (Open/Close)
+		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AT2_InventorySystemCharacter::ToggleInventory);
 	}
 	else
 	{
@@ -84,11 +93,9 @@ void AT2_InventorySystemCharacter::BeginPlay()
 		if (InventoryWidgetClass)
 		{
 			InventoryWidget = CreateWidget<UInventoryWidget>(PlayerController, InventoryWidgetClass);
-			InventoryWidget->AddToViewport();
 			InventoryWidget->Owner = this; 
 		}
 		
-		InventoryWidget->RefreshInventory(InventoryComponent->GetAllItems());
 	}
 }
 
@@ -173,4 +180,25 @@ void AT2_InventorySystemCharacter::DeleteItemAtIndex(int32 Index)
 	InventoryComponent->DeleteItemAtIndex(Index);
 	InventoryWidget->RefreshInventory(InventoryComponent->GetAllItems());
 	
+}
+
+void AT2_InventorySystemCharacter::ToggleInventory()
+{
+	APlayerController* PlayerController = Cast<APlayerController>(Controller);
+	if (!PlayerController)
+		return;
+	
+	if (bIsInventoryOpen)
+	{
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		InventoryWidget->RemoveFromParent();
+		PlayerController->bShowMouseCursor = false;
+	} else
+	{
+		InventoryWidget->AddToViewport();
+		InventoryWidget->RefreshInventory(InventoryComponent->GetAllItems());
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		PlayerController->bShowMouseCursor = true;
+	}
+	bIsInventoryOpen = !bIsInventoryOpen;
 }
