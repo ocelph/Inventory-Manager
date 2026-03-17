@@ -3,6 +3,8 @@
 
 #include "InventoryActorComponent.h"
 
+#include "ShrinkPowerUpItem.h"
+
 // Sets default values for this component's properties
 UInventoryActorComponent::UInventoryActorComponent()
 {
@@ -44,6 +46,7 @@ UItemObject* UInventoryActorComponent::GetItemAtIndex(int32 Index)
 
 bool UInventoryActorComponent::UseItemAtIndex(int32 Index, AT2_InventorySystemCharacter* Character)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Use Item"));
 	if (Index >= InventoryItems.Num() || Index < 0)
 	{
 		return false;
@@ -57,20 +60,20 @@ bool UInventoryActorComponent::UseItemAtIndex(int32 Index, AT2_InventorySystemCh
 
 bool UInventoryActorComponent::DeleteItemAtIndex(int32 Index)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Number of items in inventory are: %d"), InventoryItems.Num());
+	UE_LOG(LogTemp, Warning, TEXT("Delete Item"));
 	if (Index >= InventoryItems.Num() || Index < 0)
 	{
 		return false;
 	}
 	
 	InventoryItems.RemoveAt(Index);
-	UE_LOG(LogTemp, Warning, TEXT("Number of items in inventory are: %d"), InventoryItems.Num());
 	return true;
 }
 
 bool UInventoryActorComponent::AddItem(UItemObject* NewItem)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Number of items in inventory are: %d"), InventoryItems.Num());
+	UE_LOG(LogTemp, Warning, TEXT("Add Item"));
+	// UE_LOG(LogTemp, Warning, TEXT("Number of items in inventory are: %d"), InventoryItems.Num());
 	// check if there is still space in the inventory. if there is add and return true, else return false
 	if (InventoryItems.Num() >= InventorySize)
 	{
@@ -80,8 +83,6 @@ bool UInventoryActorComponent::AddItem(UItemObject* NewItem)
 	
 	// could do an if else but anyway it wont reach here if it goes into the if statement
 	InventoryItems.Add(NewItem);
-	UE_LOG(LogTemp, Warning, TEXT("Item added successfully"));
-	UE_LOG(LogTemp, Warning, TEXT("Number of items in inventory are: %d"), InventoryItems.Num());
 	
 	return true;
 	
@@ -101,7 +102,12 @@ void UInventoryActorComponent::CreateDefaultItems()
 	TempItem->SetDescription("A potion to recover lost health");
 	InventoryItems.Add(TempItem);
 	
-	TempItem = NewObject<UItemObject>();
+	TempItem = NewObject<UShrinkPowerUpItem>();
+	TempItem->SetName("Shrink");
+	TempItem->SetDescription("Makes you shrink for 10 seconds");
+	InventoryItems.Add(TempItem);
+	
+	TempItem = NewObject<UShrinkPowerUpItem>();
 	TempItem->SetName("Shrink");
 	TempItem->SetDescription("Makes you shrink for 10 seconds");
 	InventoryItems.Add(TempItem);
@@ -110,6 +116,7 @@ void UInventoryActorComponent::CreateDefaultItems()
 	TempItem->SetName("Freeze");
 	TempItem->SetDescription("Makes you freeze for 10 seconds");
 	InventoryItems.Add(TempItem);
+	
 	
 }
 

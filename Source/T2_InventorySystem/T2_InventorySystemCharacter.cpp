@@ -52,6 +52,8 @@ AT2_InventorySystemCharacter::AT2_InventorySystemCharacter()
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryActorComponent>(TEXT("Inventory Component"));
 	bIsInventoryOpen = false;
+	
+	shrinkPowerUpActivate = false;
 }
 
 void AT2_InventorySystemCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

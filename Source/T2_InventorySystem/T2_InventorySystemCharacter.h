@@ -149,5 +149,7 @@ public:
 		float CurrentHealth = 100;
 	
 	void DamagePlayer(float Damage);
+	
+	bool shrinkPowerUpActivate;
 };
 
