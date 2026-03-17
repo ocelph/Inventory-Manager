@@ -202,3 +202,9 @@ void AT2_InventorySystemCharacter::ToggleInventory()
 	}
 	bIsInventoryOpen = !bIsInventoryOpen;
 }
+
+void AT2_InventorySystemCharacter::UseItem(int32 Index)
+{
+	InventoryComponent->UseItemAtIndex(Index, this);
+	InventoryWidget->RefreshInventory(InventoryComponent->GetAllItems());
+}

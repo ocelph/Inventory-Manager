@@ -2,10 +2,12 @@
 
 #pragma once
 
-#include "T2_InventorySystemCharacter.h"
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
 #include "ItemObject.generated.h"
+
+// forward declaration
+class AT2_InventorySystemCharacter;
 
 /**
 * UCLASS Macros
@@ -20,8 +22,6 @@
  */
 
 UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
-
-class AT2_InventorySystemCharacter;
 
 class T2_INVENTORYSYSTEM_API UItemObject : public UObject
 {
@@ -39,7 +39,9 @@ class T2_INVENTORYSYSTEM_API UItemObject : public UObject
 		FString GetName();
 		FString GetDescription();
 	
-		void UseItem(AT2_InventorySystemCharacter* Character);
+		// Marking a function as virtual in a base class, tells C++ this function can be overridden in a derived class
+		// We will override the function each time depending on what it does
+		virtual void UseItem(AT2_InventorySystemCharacter* Character);
 	
 };
 

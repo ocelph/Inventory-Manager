@@ -44,7 +44,14 @@ UItemObject* UInventoryActorComponent::GetItemAtIndex(int32 Index)
 
 bool UInventoryActorComponent::UseItemAtIndex(int32 Index, AT2_InventorySystemCharacter* Character)
 {
-	// to be changed when we add the functionality
+	if (Index >= InventoryItems.Num() || Index < 0)
+	{
+		return false;
+	}
+	UItemObject* UsedItem = InventoryItems[Index];
+	UsedItem-> UseItem(Character);
+	InventoryItems.RemoveAt(Index);
+	
 	return true;
 }
 
@@ -69,11 +76,13 @@ bool UInventoryActorComponent::AddItem(UItemObject* NewItem)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Inventory is full"));
 		return false;
-	} 
-	
+	}
 	
 	// could do an if else but anyway it wont reach here if it goes into the if statement
 	InventoryItems.Add(NewItem);
+	UE_LOG(LogTemp, Warning, TEXT("Item added successfully"));
+	UE_LOG(LogTemp, Warning, TEXT("Number of items in inventory are: %d"), InventoryItems.Num());
+	
 	return true;
 	
 }

@@ -82,7 +82,8 @@ void UInventoryWidget::OnButtonWasClicked(UItemButtonWidget* Button)
 
 void UInventoryWidget::OnUseButtonClicked()
 {
-	
+	Owner->UseItem(SelectedItemIndex);
+	SelectedItemIndex = -1;
 }
 
 void UInventoryWidget::OnDeleteButtonClicked()

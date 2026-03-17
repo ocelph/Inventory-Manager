@@ -143,5 +143,6 @@ public:
 	UFUNCTION()
 	void ToggleInventory();
 	
+	void UseItem(int32 Index);
 };
 

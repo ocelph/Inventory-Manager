@@ -28,3 +28,8 @@ FString UItemObject::GetDescription()
 {
 	return ItemDescription;
 }
+
+void UItemObject::UseItem(AT2_InventorySystemCharacter* Character)
+{
+	// leave empty for now
+}

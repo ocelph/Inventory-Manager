@@ -48,9 +48,7 @@ void APickUpItem::OnOverlap(UPrimitiveComponent* OverlapComp, AActor* OtherActor
 			UE_LOG(LogTemp, Warning, TEXT("Player detected"));
 			if (Player->AddItem(Item))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Item added successfully"));
 				Destroy();
-				UE_LOG(LogTemp, Warning, TEXT("Item destroyed successfully"));
 			} else
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Item not added!!"));
