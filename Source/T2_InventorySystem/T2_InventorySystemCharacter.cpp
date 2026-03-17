@@ -208,3 +208,23 @@ void AT2_InventorySystemCharacter::UseItem(int32 Index)
 	InventoryComponent->UseItemAtIndex(Index, this);
 	InventoryWidget->RefreshInventory(InventoryComponent->GetAllItems());
 }
+
+void AT2_InventorySystemCharacter::DamagePlayer(float Damage)
+{
+	CurrentHealth -= Damage;
+	
+	// if health <= 0, character dies, level is restarted
+	if(CurrentHealth <= 0)
+	{
+		APlayerController* PlayerController = Cast<APlayerController>(GetController());
+		PlayerController->RestartLevel();
+	}
+	
+	// To display our health, we’ll get a reference to the engine using the global variable GEngine, and print to the screen
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+			FString::Printf(TEXT("Current health: %f"), CurrentHealth));
+	}
+
+}

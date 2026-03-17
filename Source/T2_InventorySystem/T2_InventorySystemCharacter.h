@@ -144,5 +144,10 @@ public:
 	void ToggleInventory();
 	
 	void UseItem(int32 Index);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float CurrentHealth = 100;
+	
+	void DamagePlayer(float Damage);
 };
 
