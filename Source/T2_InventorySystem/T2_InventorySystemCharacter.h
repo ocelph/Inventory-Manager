@@ -119,9 +119,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 		class UInventoryActorComponent* InventoryComponent;
 
-	bool AddItem(UItemObject* NewItem);
 
 public:
+	bool AddItem(UItemObject* NewItem);
+	
 	/* These functions will allow us to provide indices and either get the item in our inventory at
 	that index, or delete it! */
 	UItemObject* GetItemAtIndex(int32 Index);

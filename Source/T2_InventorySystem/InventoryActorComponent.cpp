@@ -50,22 +50,27 @@ bool UInventoryActorComponent::UseItemAtIndex(int32 Index, AT2_InventorySystemCh
 
 bool UInventoryActorComponent::DeleteItemAtIndex(int32 Index)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Number of items in inventory are: %d"), InventoryItems.Num());
 	if (Index >= InventoryItems.Num() || Index < 0)
 	{
 		return false;
 	}
 	
 	InventoryItems.RemoveAt(Index);
+	UE_LOG(LogTemp, Warning, TEXT("Number of items in inventory are: %d"), InventoryItems.Num());
 	return true;
 }
 
 bool UInventoryActorComponent::AddItem(UItemObject* NewItem)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Number of items in inventory are: %d"), InventoryItems.Num());
 	// check if there is still space in the inventory. if there is add and return true, else return false
 	if (InventoryItems.Num() >= InventorySize)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Inventory is full"));
 		return false;
 	} 
+	
 	
 	// could do an if else but anyway it wont reach here if it goes into the if statement
 	InventoryItems.Add(NewItem);
