@@ -3,6 +3,7 @@
 
 #include "InventoryActorComponent.h"
 
+#include "DoubleJumpPowerUpItem.h"
 #include "ShrinkPowerUpItem.h"
 
 // Sets default values for this component's properties
@@ -103,13 +104,9 @@ void UInventoryActorComponent::CreateDefaultItems()
 	InventoryItems.Add(TempItem);
 	
 	TempItem = NewObject<UShrinkPowerUpItem>();
-	TempItem->SetName("Shrink");
-	TempItem->SetDescription("Makes you shrink for 10 seconds");
 	InventoryItems.Add(TempItem);
 	
-	TempItem = NewObject<UShrinkPowerUpItem>();
-	TempItem->SetName("Shrink");
-	TempItem->SetDescription("Makes you shrink for 10 seconds");
+	TempItem = NewObject<UDoubleJumpPowerUpItem>();
 	InventoryItems.Add(TempItem);
 	
 	TempItem = NewObject<UItemObject>();
